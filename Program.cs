@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
@@ -30,10 +29,38 @@ namespace Task_Management_System
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnChallenge = async context =>
+                    {
+                        var detail = context.ErrorDescription;
+
+                        if (string.IsNullOrWhiteSpace(detail) && context.AuthenticateFailure != null)
+                        {
+                            detail = context.AuthenticateFailure.Message;
+                        }
+
+                        if (string.IsNullOrWhiteSpace(detail))
+                        {
+                            detail = "JWT is missing, invalid, expired, or malformed.";
+                        }
+
+                        context.HandleResponse();
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        context.Response.ContentType = "application/json";
+                        await context.Response.WriteAsJsonAsync(new
+                        {
+                            status = 401,
+                            message = "Unauthorized",
+                            detail
+                        });
+                    }
+                };
             });
 
             builder.Services.AddRateLimiter(options =>
-            { 
+            {
                 // Code block for the Custom 429 response
                 options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
@@ -84,7 +111,6 @@ namespace Task_Management_System
             builder.Services.AddAuthorization();
 
             // Add services to the container.
-
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
