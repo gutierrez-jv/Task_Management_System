@@ -1,6 +1,84 @@
 @Task_Management_System_HostAddress = http://localhost:5149
+@apiKey = Tas-Man-Sys-ApiKey-Vince-23-1762-524
 
-GET {{Task_Management_System_HostAddress}}/weatherforecast/
-Accept: application/json
+### LOGIN AS ADMIN
+POST {{Task_Management_System_HostAddress}}/api/auth/login
+Content-Type: application/json
+X-API-KEY: {{apiKey}}
 
-###
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### LOGIN AS MANAGER
+POST {{Task_Management_System_HostAddress}}/api/auth/login
+Content-Type: application/json
+X-API-KEY: {{apiKey}}
+
+{
+  "username": "manager",
+  "password": "manager123"
+}
+
+### LOGIN AS EMPLOYEE
+POST {{Task_Management_System_HostAddress}}/api/auth/login
+Content-Type: application/json
+X-API-KEY: {{apiKey}}
+
+{
+  "username": "employee",
+  "password": "employee123"
+}
+
+### LOGIN WITHOUT API KEY - SHOULD FAIL
+POST {{Task_Management_System_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### LOGIN WITH WRONG API KEY - SHOULD FAIL
+POST {{Task_Management_System_HostAddress}}/api/auth/login
+Content-Type: application/json
+X-API-KEY: wrong-key
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### GET TASKS - PASTE EMPLOYEE, MANAGER, OR ADMIN TOKEN
+GET {{Task_Management_System_HostAddress}}/api/tasks
+Authorization: Bearer PASTE_TOKEN_HERE
+
+### CREATE TASK - PASTE ADMIN OR MANAGER TOKEN
+POST {{Task_Management_System_HostAddress}}/api/tasks
+Content-Type: application/json
+Authorization: Bearer PASTE_TOKEN_HERE
+
+{
+  "title": "Finish Documentation",
+  "description": "Complete the API documentation"
+}
+
+### UPDATE TASK - PASTE ADMIN OR MANAGER TOKEN
+PUT {{Task_Management_System_HostAddress}}/api/tasks/1
+Content-Type: application/json
+Authorization: Bearer PASTE_TOKEN_HERE
+
+{
+  "title": "Prepare Report Updated",
+  "description": "Update and finalize weekly report",
+  "status": "Completed"
+}
+
+### GET USERS - ADMIN ONLY
+GET {{Task_Management_System_HostAddress}}/api/admin/users
+Authorization: Bearer PASTE_ADMIN_TOKEN_HERE
+
+### DELETE USER - ADMIN ONLY
+DELETE {{Task_Management_System_HostAddress}}/api/admin/users/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NzYzNDQ5MTN9.xLJ9NOeurOZzk83m2f-W9K-FAHhyB79mr0hawFhNKeg
