@@ -8,6 +8,7 @@ namespace Task_Management_System.Controllers
 {
     [ApiController]
     [Route("api/tasks")]
+    [ApiKeyClassAuthorize]
     [Authorize(Roles = "Admin,Manager,Employee")]
     public class EmployeeController : ControllerBase
     {

@@ -52,11 +52,13 @@ X-API-KEY: wrong-key
 
 ### GET TASKS - PASTE EMPLOYEE, MANAGER, OR ADMIN TOKEN
 GET {{Task_Management_System_HostAddress}}/api/tasks
+X-API-KEY: {{apiKey}}
 Authorization: Bearer PASTE_TOKEN_HERE
 
 ### CREATE TASK - PASTE ADMIN OR MANAGER TOKEN
 POST {{Task_Management_System_HostAddress}}/api/tasks
 Content-Type: application/json
+X-API-KEY: {{apiKey}}
 Authorization: Bearer PASTE_TOKEN_HERE
 
 {
@@ -67,6 +69,7 @@ Authorization: Bearer PASTE_TOKEN_HERE
 ### UPDATE TASK - PASTE ADMIN OR MANAGER TOKEN
 PUT {{Task_Management_System_HostAddress}}/api/tasks/1
 Content-Type: application/json
+X-API-KEY: {{apiKey}}
 Authorization: Bearer PASTE_TOKEN_HERE
 
 {
@@ -77,8 +80,10 @@ Authorization: Bearer PASTE_TOKEN_HERE
 
 ### GET USERS - ADMIN ONLY
 GET {{Task_Management_System_HostAddress}}/api/admin/users
+X-API-KEY: {{apiKey}}
 Authorization: Bearer PASTE_ADMIN_TOKEN_HERE
 
-### DELETE USER - ADMIN ONLY
+### DELETE USER - ADMIN ONLY (USE A FRESH ADMIN TOKEN FROM LOGIN; TOKENS EXPIRE IN 1 HOUR)
 DELETE {{Task_Management_System_HostAddress}}/api/admin/users/3
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NzYzNDQ5MTN9.xLJ9NOeurOZzk83m2f-W9K-FAHhyB79mr0hawFhNKeg
+X-API-KEY: {{apiKey}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NzYzNDU4ODd9.qaFTbzBuAZo3JiGTgwB9IgGkm0QJ1D7tvGY3o27D4NM

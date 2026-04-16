@@ -8,6 +8,7 @@ namespace Task_Management_System.Controllers
 {
     [ApiController]
     [Route("api/admin")]
+    [ApiKeyClassAuthorize]
     [Authorize(Roles = "Admin")]
     [EnableRateLimiting("adminPolicy")]
     public class AdminController : ControllerBase
