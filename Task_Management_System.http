@@ -1,6 +1,89 @@
 @Task_Management_System_HostAddress = http://localhost:5149
+@apiKey = Tas-Man-Sys-ApiKey-Vince-23-1762-524
 
-GET {{Task_Management_System_HostAddress}}/weatherforecast/
-Accept: application/json
+### LOGIN AS ADMIN
+POST {{Task_Management_System_HostAddress}}/api/auth/login
+Content-Type: application/json
+X-API-KEY: {{apiKey}}
 
-###
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### LOGIN AS MANAGER
+POST {{Task_Management_System_HostAddress}}/api/auth/login
+Content-Type: application/json
+X-API-KEY: {{apiKey}}
+
+{
+  "username": "manager",
+  "password": "manager123"
+}
+
+### LOGIN AS EMPLOYEE
+POST {{Task_Management_System_HostAddress}}/api/auth/login
+Content-Type: application/json
+X-API-KEY: {{apiKey}}
+
+{
+  "username": "employee",
+  "password": "employee123"
+}
+
+### LOGIN WITHOUT API KEY - SHOULD FAIL
+POST {{Task_Management_System_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### LOGIN WITH WRONG API KEY - SHOULD FAIL
+POST {{Task_Management_System_HostAddress}}/api/auth/login
+Content-Type: application/json
+X-API-KEY: wrong-key
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### GET TASKS - PASTE EMPLOYEE, MANAGER, OR ADMIN TOKEN
+GET {{Task_Management_System_HostAddress}}/api/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NzYzNDcxMjN9.HH17sOJfCN70mNGGZebaULJnCOIhEY3TDhaEmCzNYAo
+
+### CREATE TASK - PASTE ADMIN OR MANAGER TOKEN
+POST {{Task_Management_System_HostAddress}}/api/tasks
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NzYzNDcxMjN9.HH17sOJfCN70mNGGZebaULJnCOIhEY3TDhaEmCzNYAo
+
+{
+  "title": "Finish Documentation",
+  "description": "Complete the API documentation"
+}
+
+### UPDATE TASK - PASTE ADMIN OR MANAGER TOKEN
+PUT {{Task_Management_System_HostAddress}}/api/tasks/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NzYzNDcxMjN9.HH17sOJfCN70mNGGZebaULJnCOIhEY3TDhaEmCzNYAo
+
+{
+  "title": "Prepare Report Updated",
+  "description": "Update and finalize weekly report",
+  "status": "Completed"
+}
+
+### GET USERS - ADMIN ONLY
+GET {{Task_Management_System_HostAddress}}/api/admin/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NzYzNDcxMjN9.HH17sOJfCN70mNGGZebaULJnCOIhEY3TDhaEmCzNYAo
+
+### DELETE USER - ADMIN ONLY (USE A FRESH ADMIN TOKEN FROM LOGIN; TOKENS EXPIRE IN 1 HOUR)
+DELETE {{Task_Management_System_HostAddress}}/api/admin/users/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NzYzNDc4NTV9.7So2d2dPXj1q2Q0-yekTgvCdBOdKHUAdDDjGhRAY8lw
+
+
+
+### Since it is time already, I will stop here.
+### But I will make a new branch and try to make it work there named Fully Working
