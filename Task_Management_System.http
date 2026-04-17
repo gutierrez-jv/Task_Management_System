@@ -1,5 +1,9 @@
-@Task_Management_System_HostAddress = http://localhost:5149
+@Task_Management_System_HostAddress = https://localhost:7099
 @apiKey = Tas-Man-Sys-ApiKey-Vince-23-1762-524
+
+@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NzY0NDU4Njl9.iy5154bZy5pYiBRksfaAViGNXTGyiQh-XrGFieoiPFA
+@managerToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFuYWdlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6Ik1hbmFnZXIiLCJ1c2VybmFtZSI6Im1hbmFnZXIiLCJyb2xlIjoiTWFuYWdlciIsImV4cCI6MTc3NjQ0NTg4Mn0.P0yeiAgB4IfBPLDnMHBw8WjrPvevZupc2o_6fzNC0io
+@employeeToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZW1wbG95ZWUiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJFbXBsb3llZSIsInVzZXJuYW1lIjoiZW1wbG95ZWUiLCJyb2xlIjoiRW1wbG95ZWUiLCJleHAiOjE3NzY0NDU5MDB9.mgohs21dLm8_swQGC4jm-BcS4fNBupb3nIR6I9gYeus
 
 ### LOGIN AS ADMIN
 POST {{Task_Management_System_HostAddress}}/api/auth/login
@@ -50,14 +54,24 @@ X-API-KEY: wrong-key
   "password": "admin123"
 }
 
+### LOGIN WITH BACKUP API KEY - SHOULD WORK
+POST {{Task_Management_System_HostAddress}}/api/auth/login
+Content-Type: application/json
+X-API-KEY: Tas-Man-Sys-ApiKey-Vince-Backup-524
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
 ### GET TASKS - PASTE EMPLOYEE, MANAGER, OR ADMIN TOKEN
 GET {{Task_Management_System_HostAddress}}/api/tasks
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NzYzNDcxMjN9.HH17sOJfCN70mNGGZebaULJnCOIhEY3TDhaEmCzNYAo
+Authorization: Bearer {{paste-token-name}}
 
 ### CREATE TASK - PASTE ADMIN OR MANAGER TOKEN
 POST {{Task_Management_System_HostAddress}}/api/tasks
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NzYzNDcxMjN9.HH17sOJfCN70mNGGZebaULJnCOIhEY3TDhaEmCzNYAo
+Authorization: Bearer {{paste-token-name}}
 
 {
   "title": "Finish Documentation",
@@ -67,7 +81,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hc
 ### UPDATE TASK - PASTE ADMIN OR MANAGER TOKEN
 PUT {{Task_Management_System_HostAddress}}/api/tasks/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NzYzNDcxMjN9.HH17sOJfCN70mNGGZebaULJnCOIhEY3TDhaEmCzNYAo
+Authorization: Bearer {{paste-token-name}}
 
 {
   "title": "Prepare Report Updated",
@@ -77,13 +91,18 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hc
 
 ### GET USERS - ADMIN ONLY
 GET {{Task_Management_System_HostAddress}}/api/admin/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NzYzNDcxMjN9.HH17sOJfCN70mNGGZebaULJnCOIhEY3TDhaEmCzNYAo
+Authorization: Bearer {{adminToken}}
 
-### DELETE USER - ADMIN ONLY (USE A FRESH ADMIN TOKEN FROM LOGIN; TOKENS EXPIRE IN 1 HOUR)
+### DELETE USER - ADMIN ONLY 
 DELETE {{Task_Management_System_HostAddress}}/api/admin/users/3
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NzYzNDc4NTV9.7So2d2dPXj1q2Q0-yekTgvCdBOdKHUAdDDjGhRAY8lw
+Authorization: Bearer {{adminToken}}
 
 
 
-### Since it is time already, I will stop here.
-### But I will make a new branch and try to make it work there named Fully Working
+### So how was I able to make it work? I simply just needed to change the address into a https one
+### to do that check for the output window and check for listening on and copy the https address
+### I was not properly able to test if it was working before because I can't get past the 
+### unauthorized error due to the http address. 
+### it errors on http because http, from my understanding, drops the JWT token in the header thus making
+### every request unauthenticated and thus unauthorized.
+### With some changes here and there from the development branch, it now works.

@@ -66,6 +66,13 @@ namespace Task_Management_System
 
                 options.OnRejected = async (context, token) =>
                 {
+                    var logger = context.HttpContext.RequestServices
+                        .GetRequiredService<ILogger<Program>>();
+
+                    logger.LogWarning("Rate limit violation on {Path} by {User}.",
+                        context.HttpContext.Request.Path,
+                        context.HttpContext.User.Identity?.Name ?? "anonymous");
+
                     context.HttpContext.Response.ContentType = "application/json";
 
                     var response = new
@@ -86,19 +93,25 @@ namespace Task_Management_System
                     limiterOptions.QueueLimit = 0;
                 });
 
-                options.AddFixedWindowLimiter("taskGetPolicy", limiterOptions =>
-                {
-                    limiterOptions.PermitLimit = 20;
-                    limiterOptions.Window = TimeSpan.FromMinutes(1);
-                    limiterOptions.QueueLimit = 0;
-                });
+                options.AddPolicy("taskGetPolicy", context =>
+                    RateLimitPartition.GetFixedWindowLimiter(
+                        GetRateLimitKey(context, "taskGetPolicy"),
+                        _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = GetTaskGetLimit(context),
+                            Window = TimeSpan.FromMinutes(1),
+                            QueueLimit = 0
+                        }));
 
-                options.AddFixedWindowLimiter("taskWritePolicy", limiterOptions =>
-                {
-                    limiterOptions.PermitLimit = 10;
-                    limiterOptions.Window = TimeSpan.FromMinutes(1);
-                    limiterOptions.QueueLimit = 0;
-                });
+                options.AddPolicy("taskWritePolicy", context =>
+                    RateLimitPartition.GetFixedWindowLimiter(
+                        GetRateLimitKey(context, "taskWritePolicy"),
+                        _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = GetTaskWriteLimit(context),
+                            Window = TimeSpan.FromMinutes(1),
+                            QueueLimit = 0
+                        }));
 
                 options.AddFixedWindowLimiter("adminPolicy", limiterOptions =>
                 {
@@ -127,14 +140,51 @@ namespace Task_Management_System
 
             app.UseHttpsRedirection();
 
-            app.UseRateLimiter();
-
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseRateLimiter();
 
             app.MapControllers();
 
             app.Run();
+        }
+
+        private static string GetRateLimitKey(HttpContext context, string policyName)
+        {
+            var username = context.User.Identity?.Name;
+
+            if (!string.IsNullOrWhiteSpace(username))
+            {
+                return $"{policyName}:{username}";
+            }
+
+            return $"{policyName}:{context.Connection.RemoteIpAddress}";
+        }
+
+        private static int GetTaskGetLimit(HttpContext context)
+        {
+            if (context.User.IsInRole("Admin"))
+            {
+                return 60;
+            }
+
+            if (context.User.IsInRole("Manager"))
+            {
+                return 30;
+            }
+
+            return 20;
+        }
+
+        private static int GetTaskWriteLimit(HttpContext context)
+        {
+            if (context.User.IsInRole("Admin"))
+            {
+                return 30;
+            }
+
+            return 10;
         }
     }
 }
